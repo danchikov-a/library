@@ -5,7 +5,7 @@
     <title>Личная страница</title>
 </head>
 <body>
-    <h1>Добро пожаловать</h1>
-    <div modelAttribute="username"></div>
+    <p modelAttribute="nick" th:text="'Добро пожаловать '+${nick}"/>
+
 </body>
 </html>
