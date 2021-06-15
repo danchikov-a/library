@@ -1,10 +1,11 @@
 package com.danchikov;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringMain {
+public class Application {
     public static void main(String[] args) {
-        SpringApplication.run(SpringMain.class,args);
+        SpringApplication.run(Application.class, args);
     }
 }

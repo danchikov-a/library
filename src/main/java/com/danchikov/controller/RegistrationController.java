@@ -1,5 +1,6 @@
 package com.danchikov.controller;
 
+
 import com.danchikov.entity.User;
 import com.danchikov.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +14,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-public class UserController {
+public class RegistrationController {
+
     @Autowired
     private UserService userService;
+
     @GetMapping("/registration")
-    public String showRegForm(Model model, User user){
-        model.addAttribute(new User());
+    public String registration(Model model) {
+        model.addAttribute("user", new User());
+
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String createNewUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult){
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "registration";
         }
-        userService.saveUser(user);
-        return "mainPage";
+        if (!user.getPassword().equals(user.getPasswordConfirm())){
+            model.addAttribute("passwordError", "Пароли не совпадают");
+            return "registration";
+        }
+        if (!userService.saveUser(user)){
+            model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
+            return "registration";
+        }
+
+        return "redirect:/";
     }
-
-
 }

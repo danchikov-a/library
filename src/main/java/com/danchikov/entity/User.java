@@ -1,32 +1,29 @@
 package com.danchikov.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "t_user")
+public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Size(min = 2, max = 50,message = "Адрес электронной почты должен быть не менее двух символов")
-    private String email;
-    @Size(min = 2, max = 50, message = "Имя должно быть не менее двух символов")
-    private String name;
-    @Size(min = 2, max = 50,message = "Пароль должен быть не менее двух символов")
+    @Size(min=2, message = "Не меньше 5 знаков")
+    private String username;
+    @Size(min=2, message = "Не меньше 5 знаков")
     private String password;
-
-
+    @Transient
+    private String passwordConfirm;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public User() {
     }
 
     public Long getId() {
@@ -37,14 +34,41 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
@@ -53,21 +77,20 @@ public class User {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPasswordConfirm() {
+        return passwordConfirm;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public Set<Role> getRoles() {
+        return roles;
     }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
 }
