@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 <head>
     <meta charset="UTF-8">
     <title>Главная страница</title>
 </head>
 <body>
-    <h1>Главная страница</h1>
+<div name="myPage">
+    <h1 >Главная страница</h1>
     <div>
-        <a href="registration">Регистрация</a>
+        <a href="registration" name="regLink" >Регистрация</a>
     </div>
     <div>
         <a href="login">Вход</a>
     </div>
+    <div>
+        <a href="ownPage">Личная страница</a>
+    </div>
+</div>
 </body>
 </html>

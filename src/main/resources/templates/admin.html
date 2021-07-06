@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Админка</title>
+</head>
+<body>
+
+<tr th:each="userInfo: ${users}">
+    <div>
+        <!-- кнопка обрабатывается по следующему пост запросу-->
+        <form th:method="post" th:action="'user/'+${userInfo.id}+'/delete'">
+            <td th:text="${userInfo.name}" />
+            <button type="submit">Удалить</button>
+        </form>
+        <!------------------------------------------------------>
+    </div>
+</tr>
+
+</body>
+</html>

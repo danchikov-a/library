@@ -4,12 +4,15 @@ package com.danchikov.controller;
 import com.danchikov.entity.User;
 import com.danchikov.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.validation.Valid;
 
@@ -19,8 +22,13 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
+    private static final Logger logger = LogManager.getLogger();
     @GetMapping("/registration")
     public String registration(Model model) {
+        /*if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            return "redirect:/ownPage";
+        }*/
+
         model.addAttribute("user", new User());
 
         return "registration";
@@ -37,6 +45,7 @@ public class RegistrationController {
             return "registration";
         }
         if (!userService.saveUser(user)){
+            logger.info("info");
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "registration";
         }

@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 <head>
     <meta charset="UTF-8">
     <title>Личная страница</title>
 </head>
 <body>
+    <div name="myPage">
     <p modelAttribute="nick" th:text="'Добро пожаловать '+${nick}"/>
+        <div>
+            <a name="logoutLink" th:href="@{logout}">Выйти</a>
+        </div>
+    <tr th:each="taskInfo: ${tasks}">
+        <div>
+            <!-- кнопка обрабатывается по следующему пост запросу-->
+            <form th:method="post" th:action="'task/'+${taskInfo.id}+'/delete'">
+                <td th:text="${taskInfo.name}" />
+                <button type="submit">Удалить</button>
+            </form>
+            <!------------------------------------------------------>
+        </div>
+    </tr>
 
+    <form modelAttribute="task" th:method="post" th:object="${task}" th:action="@{/ownPage}" >
+        <div>
+            <div><label>Название задачи</label></div>
+            <input type="text" name="name" th:field="*{name}">
+        </div>
+        <div>
+            <button type="submit">Добавить задачу</button>
+        </div>
+    </form>
+    </div>
 </body>
 </html>
