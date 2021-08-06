@@ -11,6 +11,15 @@ public class Book {
     private String name;
     private String author;
     private Long price;
+    private String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public Long getId() {
         return id;

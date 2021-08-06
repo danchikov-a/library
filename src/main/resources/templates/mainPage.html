@@ -25,6 +25,7 @@
         <div>
                 <td th:text="${bookInfo.name}" />
                 <td th:text="${bookInfo.author}" />
+                <img th:src="@{${bookInfo.imagePath}}"/>
         </div>
     </tr>
 </div>
