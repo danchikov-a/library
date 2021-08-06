@@ -18,5 +18,16 @@
         <a href="ownPage">Личная страница</a>
     </div>
 </div>
+
+<!-- books -->
+<div>
+    <tr th:each="bookInfo: ${books}">
+        <div>
+                <td th:text="${bookInfo.name}" />
+                <td th:text="${bookInfo.author}" />
+        </div>
+    </tr>
+</div>
+
 </body>
 </html>
