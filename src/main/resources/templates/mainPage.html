@@ -23,9 +23,9 @@
 <div>
     <tr th:each="bookInfo: ${books}">
         <div>
-                <td th:text="${bookInfo.name}" />
-                <td th:text="${bookInfo.author}" />
-                <img th:src="@{${bookInfo.imagePath}}"/>
+            <td th:text="${bookInfo.name}" />
+            <td th:text="${bookInfo.author}" />
+            <img th:src="@{${bookInfo.imagePath}}" alt="Картинка никак не похожая на книгу"/>
         </div>
     </tr>
 </div>

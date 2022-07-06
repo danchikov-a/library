@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,8 +14,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserService userService;
+    private static final String REGISTRATION_VIEW = "/registration";
+    private static final String LOGIN_VIEW = "/login";
+    private static final String MAIN_PAGE_VIEW = "/mainPage";
+    private static final String OWN_PAGE_VIEW = "/ownPage";
+    private static final String ALL_VIEWS = "/";
+    private static final String USER_ROLE = "USER";
+    private final UserService userService;
+
+    public WebSecurityConfig(UserService userService) {
+        this.userService = userService;
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -23,27 +33,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        String[] staticResources = {"/css/**","/images/**"};
+
         httpSecurity
                 .csrf()
                     .disable()
                 .authorizeRequests()
-                    .antMatchers("/registration").not().fullyAuthenticated()
+                    .antMatchers(REGISTRATION_VIEW).not().fullyAuthenticated()
                     //.antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/","mainPage").permitAll()
-                    .antMatchers("/ownPage").hasRole("USER")
-                    .antMatchers("/css/**").permitAll()
-                    .antMatchers("/images/**").permitAll()
+                    .antMatchers(ALL_VIEWS, MAIN_PAGE_VIEW).permitAll()
+                    .antMatchers(OWN_PAGE_VIEW).hasRole(USER_ROLE)
+                    .antMatchers(staticResources).permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/ownPage")
+                    .loginPage(LOGIN_VIEW)
+                    .defaultSuccessUrl(OWN_PAGE_VIEW)
                     .permitAll()
                 .and()
                     .logout()
                     .permitAll()
-                    .logoutSuccessUrl("/");
+                    .logoutSuccessUrl(ALL_VIEWS);
+    }
 
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(
+                "/css/**",
+                "/js/**",
+                "/fonts/**",
+                "/images/**"
+        );
     }
 
     @Autowired

@@ -3,8 +3,6 @@ package com.danchikov.controller;
 
 import com.danchikov.entity.User;
 import com.danchikov.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,33 +14,35 @@ import javax.validation.Valid;
 
 @Controller
 public class RegistrationController {
+    private static final String REGISTRATION_VIEW = "/registration";
+    private static final String USER_MODEL = "user";
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
-
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        /*if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-            return "redirect:/ownPage";
-        }*/
-        model.addAttribute("user", new User());
-
-        return "registration";
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
-    @PostMapping("/registration")
-    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
+    @GetMapping(REGISTRATION_VIEW)
+    public String registration(Model model) {
+        model.addAttribute(USER_MODEL, new User());
 
+        return REGISTRATION_VIEW;
+    }
+
+    @PostMapping(REGISTRATION_VIEW)
+    public String addUser(@ModelAttribute(USER_MODEL) @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return REGISTRATION_VIEW;
         }
+
         if (!user.getPassword().equals(user.getPasswordConfirm())){
             model.addAttribute("passwordError", "Пароли не совпадают");
-            return "registration";
+            return REGISTRATION_VIEW;
         }
+
         if (!userService.saveUser(user)){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
-            return "registration";
+            return REGISTRATION_VIEW;
         }
 
         return "redirect:/";
