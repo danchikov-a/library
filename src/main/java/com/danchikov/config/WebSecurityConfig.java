@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,11 +17,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_VIEW = "/login";
     private static final String MAIN_PAGE_VIEW = "/mainPage";
     private static final String OWN_PAGE_VIEW = "/ownPage";
-    private static final String ALL_VIEWS = "/";
+    private static final String NO_VIEW = "/";
     private static final String USER_ROLE = "USER";
-    private final UserService userService;
-
-    public WebSecurityConfig(UserService userService) {
+    private UserService userService;
+    @Autowired
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
@@ -33,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        String[] staticResources = {"/css/**","/images/**"};
+        String[] staticResources = {"/css/*","/images/*"};
 
         httpSecurity
                 .csrf()
@@ -41,28 +40,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(REGISTRATION_VIEW).not().fullyAuthenticated()
                     //.antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers(ALL_VIEWS, MAIN_PAGE_VIEW).permitAll()
+                    .antMatchers(NO_VIEW, MAIN_PAGE_VIEW).permitAll()
                     .antMatchers(OWN_PAGE_VIEW).hasRole(USER_ROLE)
                     .antMatchers(staticResources).permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage(LOGIN_VIEW)
-                    .defaultSuccessUrl(OWN_PAGE_VIEW)
+                    .defaultSuccessUrl(OWN_PAGE_VIEW, true)
                     .permitAll()
                 .and()
                     .logout()
                     .permitAll()
-                    .logoutSuccessUrl(ALL_VIEWS);
-    }
-
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(
-                "/css/**",
-                "/js/**",
-                "/fonts/**",
-                "/images/**"
-        );
+                    .logoutSuccessUrl(NO_VIEW);
     }
 
     @Autowired

@@ -4,6 +4,7 @@ import com.danchikov.entity.Role;
 import com.danchikov.entity.User;
 import com.danchikov.repository.RoleRepository;
 import com.danchikov.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +21,7 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
     public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
