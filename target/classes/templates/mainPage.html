@@ -6,26 +6,28 @@
     <title>Главная страница</title>
 </head>
 <body>
-<div name="myPage">
-    <h1 >Главная страница</h1>
-    <div>
-        <a href="registration" name="regLink" >Регистрация</a>
-    </div>
-    <div>
-        <a href="login">Вход</a>
-    </div>
-    <div>
-        <a href="ownPage">Личная страница</a>
+<div id="myPage">
+    <h1 id="header">Главная страница</h1>
+    <div id="menu">
+        <div>
+            <a href="registration" name="regLink" >Регистрация</a>
+        </div>
+        <div>
+            <a href="login">Вход</a>
+        </div>
+        <div>
+            <a href="ownPage">Личная страница</a>
+        </div>
     </div>
 </div>
 
 <!-- books -->
 <div>
     <tr th:each="bookInfo: ${books}">
-        <div>
+        <div id="particularBook">
             <td th:text="${bookInfo.name}" />
             <td th:text="${bookInfo.author}" />
-            <img th:src="@{${bookInfo.imagePath}}" alt="Картинка никак не похожая на книгу"/>
+            <img th:src="@{/images/picture1.png}" alt="Картинка никак не похожая на книгу"/>
         </div>
     </tr>
 </div>

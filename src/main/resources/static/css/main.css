@@ -1,0 +1,15 @@
+#myPage {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#menu {
+    display: flex;
+    justify-content: space-between;
+}
+
+#particularBook {
+    display: flex;
+    justify-content: space-between;
+}
