@@ -21,10 +21,10 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
+    /*@Autowired
     public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    }*/
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;

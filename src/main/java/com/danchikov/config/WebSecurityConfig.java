@@ -20,8 +20,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String NO_VIEW = "/";
     private static final String USER_ROLE = "USER";
     private UserService userService;
-    @Autowired
-    public void setUserService(UserService userService) {
+
+    public WebSecurityConfig(UserService userService) {
         this.userService = userService;
     }
 
